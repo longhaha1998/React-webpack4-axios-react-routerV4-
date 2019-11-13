@@ -29,6 +29,16 @@ module.exports = {
                           hmr: process.env.NODE_ENV === 'development',
                         },
                     },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: () => [
+                                require('autoprefixer') ({
+                                    overrideBrowserslist: ['last 2 version', '>1%', 'ios 7']
+                                })
+                            ]
+                        }
+                    },
                     // {
                     //     loader: 'style-loader', // 创建 <style></style>
                     // },
@@ -54,6 +64,16 @@ module.exports = {
                     // },
                     {
                         loader: 'css-loader',
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: () => [
+                                require('autoprefixer') ({
+                                    overrideBrowserslist: ['last 2 version', '>1%', 'ios 7']
+                                })
+                            ]
+                        }
                     },
                     {
                         loader: 'sass-loader'
