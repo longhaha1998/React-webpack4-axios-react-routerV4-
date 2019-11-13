@@ -1,5 +1,6 @@
 const utils = require("./utils");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     // 入口
@@ -7,11 +8,6 @@ module.exports = {
         app: "./src/index" 
     },
 
-    // 出口
-    output: {
-        path : utils.resolve("../dist"), // 出口路径
-        filename: "js/[name].[chunkhash].js", // 打包后的文件名称
-    },
 
     // 模块
     module:{
@@ -25,8 +21,17 @@ module.exports = {
                 test: /\.css$/,
                 use:[
                     {
-                        loader: 'style-loader', // 创建 <style></style>
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                          // you can specify a publicPath here
+                          // by default it uses publicPath in webpackOptions.output
+                          publicPath: 'css/',
+                          hmr: process.env.NODE_ENV === 'development',
+                        },
                     },
+                    // {
+                    //     loader: 'style-loader', // 创建 <style></style>
+                    // },
                     { 
                         loader: 'css-loader',  // 转换css
                     }
@@ -36,8 +41,17 @@ module.exports = {
                 test: /\.scss$/,
                 use:[
                     {
-                        loader: 'style-loader',
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                          // you can specify a publicPath here
+                          // by default it uses publicPath in webpackOptions.output
+                          publicPath: 'css/',
+                          hmr: process.env.NODE_ENV === 'development',
+                        },
                     },
+                    // {
+                    //     loader: 'style-loader',
+                    // },
                     {
                         loader: 'css-loader',
                     },
@@ -66,6 +80,13 @@ module.exports = {
     },
 
     plugins: [
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // all options are optional
+            // filename: '[name].[hash].css',
+            chunkFilename: '[id].[chunkhash].css',
+            ignoreOrder: false, // Enable to remove warnings about conflicting order
+        }),
         new CopyWebpackPlugin([
             {
                 from: utils.resolve('../static'), // 从哪个目录copy
